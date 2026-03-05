@@ -420,6 +420,52 @@ const Admin = () => {
         return Object.keys(ageMap).map(k => ({ name: k, count: ageMap[k] })).filter(d => d.count > 0);
     };
 
+    const getFinancialData = () => {
+        const income = transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
+        const expense = transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
+        return [
+            { name: 'Income', value: income },
+            { name: 'Expense', value: expense }
+        ];
+    };
+
+    const getMonthlyFinancialData = () => {
+        const monthMap = {};
+
+        transactions.forEach(t => {
+            const monthYear = dayjs(t.date_recorded).format('MMM YYYY');
+            if (!monthMap[monthYear]) {
+                monthMap[monthYear] = { name: monthYear, Income: 0, Expense: 0 };
+            }
+            if (t.type === 'income') {
+                monthMap[monthYear].Income += t.amount;
+            } else if (t.type === 'expense') {
+                monthMap[monthYear].Expense += t.amount;
+            }
+        });
+
+        const sortedKeys = Object.keys(monthMap).sort((a, b) => {
+            return dayjs(a, 'MMM YYYY').isBefore(dayjs(b, 'MMM YYYY')) ? -1 : 1;
+        });
+
+        return sortedKeys.map(k => monthMap[k]);
+    };
+
+    const getVaccinationData = () => {
+        let vaccinated = 0;
+        let unvaccinated = 0;
+        animals.forEach(a => {
+            if (a.last_vaccination_date) {
+                vaccinated++;
+            } else {
+                unvaccinated++;
+            }
+        });
+        return [
+            { name: 'Vaccinated', value: vaccinated },
+            { name: 'Unvaccinated', value: unvaccinated }
+        ];
+    };
 
     const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#82ca9d'];
 
@@ -483,6 +529,51 @@ const Admin = () => {
                                         <YAxis />
                                         <RechartsTooltip />
                                         <Bar dataKey="count" fill="#82ca9d" />
+                                    </BarChart>
+                                </ResponsiveContainer>
+                            </Card>
+                        </Col>
+                        <Col xs={24} md={8}>
+                            <Card title="Vaccination Status" bordered={false} style={{ height: '350px', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
+                                <ResponsiveContainer width="100%" height={250}>
+                                    <PieChart>
+                                        <Pie data={getVaccinationData()} cx="50%" cy="50%" innerRadius={60} outerRadius={80} paddingAngle={5} dataKey="value">
+                                            {getVaccinationData().map((entry, index) => (
+                                                <Cell key={`cell-${index}`} fill={entry.name === 'Vaccinated' ? '#00C49F' : '#FF8042'} />
+                                            ))}
+                                        </Pie>
+                                        <RechartsTooltip />
+                                        <Legend />
+                                    </PieChart>
+                                </ResponsiveContainer>
+                            </Card>
+                        </Col>
+                        <Col xs={24} md={8}>
+                            <Card title="Financial Overview" bordered={false} style={{ height: '350px', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
+                                <ResponsiveContainer width="100%" height={250}>
+                                    <PieChart>
+                                        <Pie data={getFinancialData()} cx="50%" cy="50%" innerRadius={60} outerRadius={80} paddingAngle={5} dataKey="value">
+                                            {getFinancialData().map((entry, index) => (
+                                                <Cell key={`cell-${index}`} fill={entry.name === 'Income' ? '#00C49F' : '#FF8042'} />
+                                            ))}
+                                        </Pie>
+                                        <RechartsTooltip />
+                                        <Legend />
+                                    </PieChart>
+                                </ResponsiveContainer>
+                            </Card>
+                        </Col>
+                        <Col span={24}>
+                            <Card title="Monthly Cashflow (Income vs Expense)" bordered={false} style={{ height: '350px', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
+                                <ResponsiveContainer width="100%" height={250}>
+                                    <BarChart data={getMonthlyFinancialData()} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
+                                        <CartesianGrid strokeDasharray="3 3" />
+                                        <XAxis dataKey="name" />
+                                        <YAxis />
+                                        <RechartsTooltip />
+                                        <Legend />
+                                        <Bar dataKey="Income" fill="#00C49F" />
+                                        <Bar dataKey="Expense" fill="#FF8042" />
                                     </BarChart>
                                 </ResponsiveContainer>
                             </Card>

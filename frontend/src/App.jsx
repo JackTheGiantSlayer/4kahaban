@@ -14,6 +14,7 @@ import Profile from './pages/Profile';
 import Admin from './pages/Admin';
 import AdoptionGallery from './pages/AdoptionGallery';
 import Gallery from './pages/Gallery';
+import Terms from './pages/Terms';
 
 function App() {
     return (
@@ -32,6 +33,7 @@ function App() {
                         <Route path="/admin" element={<Admin />} />
                         <Route path="/adoption" element={<AdoptionGallery />} />
                         <Route path="/gallery" element={<Gallery />} />
+                        <Route path="/terms" element={<Terms />} />
                     </Routes>
                 </MainLayout>
             </Router>

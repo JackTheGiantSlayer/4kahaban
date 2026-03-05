@@ -41,6 +41,7 @@ const MainLayout = ({ children }) => {
         { key: '/adopted', icon: <PictureOutlined />, label: <Link to="/adopted">Adopted</Link> },
         { key: '/adoption', icon: <HeartOutlined />, label: <Link to="/adoption">Adoption</Link> },
         { key: '/hospitals', icon: <MedicineBoxOutlined />, label: <Link to="/hospitals">Hospitals</Link> },
+        { key: '/terms', icon: <SettingOutlined />, label: <Link to="/terms">Terms & Conditions</Link> },
     ];
 
     if (isAdmin) {
@@ -105,6 +106,9 @@ const MainLayout = ({ children }) => {
                 </div>
             </Content>
             <Footer style={{ textAlign: 'center' }}>
+                <div style={{ marginBottom: '8px' }}>
+                    <Link to="/terms" style={{ color: '#1890ff' }}>Terms and Conditions</Link>
+                </div>
                 Pet Management System ©{new Date().getFullYear()}
             </Footer>
         </Layout>
