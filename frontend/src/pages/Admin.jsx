@@ -169,13 +169,17 @@ const Admin = () => {
 
                 await api.post('/transactions', formData);
                 message.success('Transaction saved');
-            } else if (type === 'doctor') {
+            } else if (type === 'doctor' || type === 'edit_doctor') {
                 const payload = {
                     name: values.name,
                     specialty: values.specialty,
-                    hospital_id: record.hospital_id || record.id
+                    hospital_id: type === 'edit_doctor' ? record.hospital_id : record.id
                 };
-                await api.post('/public/doctors', payload);
+                if (type === 'edit_doctor') {
+                    await api.put(`/public/doctors/${record.id}`, payload);
+                } else {
+                    await api.post('/public/doctors', payload);
+                }
                 message.success('Specialist saved');
             }
 
@@ -279,7 +283,19 @@ const Admin = () => {
             title: 'Specialists',
             dataIndex: 'doctors',
             key: 'doctors',
-            render: docs => docs?.map(d => d.name).join(', ') || 'None'
+            render: (docs, record) => (
+                <Space direction="vertical" size="small">
+                    {docs && docs.length > 0 ? docs.map(d => (
+                        <Space key={d.id}>
+                            <Tag color="cyan" style={{ margin: 0 }}>{d.name} {d.specialty ? `(${d.specialty})` : ''}</Tag>
+                            <Button size="small" type="text" icon={<EditOutlined />} onClick={() => handleModalOpen('edit_doctor', d)} title="Edit Specialist" />
+                            <Popconfirm title="Delete this specialist?" onConfirm={() => deleteItem('doctor', d.id)}>
+                                <Button size="small" type="text" danger icon={<DeleteOutlined />} title="Delete Specialist" />
+                            </Popconfirm>
+                        </Space>
+                    )) : 'None'}
+                </Space>
+            )
         },
         {
             title: 'Actions',
@@ -708,7 +724,7 @@ const Admin = () => {
             <Tabs defaultActiveKey="1" items={tabItems} />
 
             <Modal
-                title={`${modalConfig.record ? 'Edit' : 'Add'} ${modalConfig.type ? modalConfig.type.charAt(0).toUpperCase() + modalConfig.type.slice(1) : ''}`}
+                title={modalConfig.type === 'doctor' ? 'Add Specialist' : modalConfig.type === 'edit_doctor' ? 'Edit Specialist' : `${modalConfig.record ? 'Edit' : 'Add'} ${modalConfig.type ? modalConfig.type.charAt(0).toUpperCase() + modalConfig.type.slice(1) : ''}`}
                 open={modalConfig.visible}
                 onCancel={handleModalClose}
                 onOk={() => form.submit()}
@@ -867,7 +883,7 @@ const Admin = () => {
                         </>
                     )}
 
-                    {modalConfig.type === 'doctor' && (
+                    {(modalConfig.type === 'doctor' || modalConfig.type === 'edit_doctor') && (
                         <>
                             <Form.Item name="name" label="Doctor Name" rules={[{ required: true }]}><Input /></Form.Item>
                             <Form.Item name="specialty" label="Specialty" rules={[{ required: true }]}><Input /></Form.Item>
