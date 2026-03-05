@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Typography, Row, Col, Card, Spin, List, Avatar } from 'antd';
+import { Typography, Row, Col, Card, Spin, List, Avatar, Grid } from 'antd';
 import { MedicineBoxFilled, EnvironmentOutlined, PhoneOutlined } from '@ant-design/icons';
 import api from '../services/api';
 
@@ -8,6 +8,8 @@ const { Title, Text, Paragraph } = Typography;
 const Hospitals = () => {
     const [hospitals, setHospitals] = useState([]);
     const [loading, setLoading] = useState(true);
+    const screens = Grid.useBreakpoint();
+    const isMobile = !screens.md;
 
     useEffect(() => {
         const fetchData = async () => {
@@ -26,13 +28,19 @@ const Hospitals = () => {
     if (loading) return <div style={{ textAlign: 'center', padding: '50px' }}><Spin size="large" /></div>;
 
     return (
-        <div>
-            <div style={{ textAlign: 'center', marginBottom: 40, background: 'linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%)', padding: 40, borderRadius: 16 }}>
-                <Title level={1} style={{ color: '#fff', textShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
-                    <MedicineBoxFilled style={{ marginRight: 15 }} />
-                    Hospitals & Specialists
+        <div style={{ padding: isMobile ? '0' : '0 20px' }}>
+            <div style={{
+                textAlign: 'center',
+                marginBottom: isMobile ? 32 : 40,
+                background: 'linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%)',
+                padding: isMobile ? '32px 16px' : 40,
+                borderRadius: 16
+            }}>
+                <Title level={isMobile ? 2 : 1} style={{ color: '#fff', textShadow: '0 2px 4px rgba(0,0,0,0.1)', margin: 0 }}>
+                    <MedicineBoxFilled style={{ marginRight: isMobile ? 8 : 15 }} />
+                    Hospitals
                 </Title>
-                <Text style={{ fontSize: '1.2rem', color: '#fff' }}>Find trusted care for your little ones</Text>
+                <Text style={{ fontSize: isMobile ? '1rem' : '1.2rem', color: '#fff' }}>Find trusted care for your little ones</Text>
             </div>
 
             <Row gutter={[24, 24]}>
@@ -56,7 +64,7 @@ const Hospitals = () => {
                                         <List.Item.Meta
                                             avatar={<Avatar style={{ backgroundColor: '#1677ff' }}>Dr</Avatar>}
                                             title={doc.name}
-                                            description={`Specialty: ${doc.specialty}`}
+                                            description={`Specialty: ${doc.specialty} `}
                                         />
                                     </List.Item>
                                 )}

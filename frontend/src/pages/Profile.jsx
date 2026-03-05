@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Typography, Form, Input, Button, message, Card, Tabs, Upload } from 'antd';
+import { Typography, Form, Input, Button, message, Card, Tabs, Upload, Grid } from 'antd';
 import { UserOutlined, PhoneOutlined, HomeOutlined, UploadOutlined } from '@ant-design/icons';
 import api from '../services/api';
 
@@ -11,6 +11,8 @@ const Profile = () => {
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [pets, setPets] = useState([]);
+    const screens = Grid.useBreakpoint();
+    const isMobile = !screens.md;
 
     useEffect(() => {
         fetchProfile();
@@ -48,8 +50,8 @@ const Profile = () => {
     if (loading) return <div>Loading...</div>;
 
     return (
-        <div>
-            <Title level={2}>My Profile</Title>
+        <div style={{ padding: isMobile ? '0' : '0 20px' }}>
+            <Title level={isMobile ? 3 : 2}>My Profile</Title>
             <Tabs defaultActiveKey="1">
                 <TabPane tab="Personal Details" key="1">
                     <Card style={{ maxWidth: 600 }}>

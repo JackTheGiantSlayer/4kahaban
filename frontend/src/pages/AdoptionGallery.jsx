@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Typography, Row, Col, Card, Spin, Tag, Button, Empty, Modal, Image, Space, Carousel } from 'antd';
+import { Typography, Row, Col, Card, Spin, Tag, Button, Modal, Image, Space, Carousel, Empty, message, Grid } from 'antd';
 import { HeartOutlined, ShareAltOutlined, InfoCircleOutlined, CalendarOutlined, PlusCircleOutlined } from '@ant-design/icons';
-import api from '../services/api';
+import api, { API_BASE_URL } from '../services/api';
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -11,6 +11,8 @@ const AdoptionGallery = () => {
     const [loading, setLoading] = useState(true);
     const [selectedPet, setSelectedPet] = useState(null);
     const [previewVisible, setPreviewVisible] = useState(false);
+    const screens = Grid.useBreakpoint();
+    const isMobile = !screens.md;
 
     useEffect(() => {
         const fetchData = async () => {
@@ -33,13 +35,13 @@ const AdoptionGallery = () => {
         <div style={{ width: '100%', padding: '0 40px', margin: '0 auto' }}>
             <div style={{
                 textAlign: 'center',
-                marginBottom: 60,
-                padding: '40px 20px',
+                marginBottom: isMobile ? 32 : 60,
+                padding: isMobile ? '24px 16px' : '40px 20px',
                 background: 'linear-gradient(135deg, #f0f7ff 0%, #e6f4ff 100%)',
                 borderRadius: '24px'
             }}>
-                <Title level={1} style={{ color: '#003a8c', marginBottom: 16 }}>Find Your Perfect Match 🐾</Title>
-                <Paragraph style={{ fontSize: '1.2rem', color: '#434343', maxWidth: 700, margin: '0 auto' }}>
+                <Title level={isMobile ? 2 : 1} style={{ color: '#003a8c', marginBottom: 16 }}>Find Your Perfect Match 🐾</Title>
+                <Paragraph style={{ fontSize: isMobile ? '1rem' : '1.2rem', color: '#434343', maxWidth: 700, margin: '0 auto' }}>
                     Browse through our lovable companions waiting for a place to call home.
                     Every pet here is looking for a family to love.
                 </Paragraph>
@@ -70,7 +72,7 @@ const AdoptionGallery = () => {
                                     >
                                         <img
                                             alt={pet.name}
-                                            src={pet.image_url ? `${import.meta.env.VITE_API_URL}${pet.image_url}` : 'https://placehold.co/400x400?text=Waiting+for+Photo'}
+                                            src={pet.image_url ? `${API_BASE_URL}${pet.image_url}` : 'https://placehold.co/400x400?text=Waiting+for+Photo'}
                                             style={{
                                                 height: '100%',
                                                 width: '100%',
@@ -149,9 +151,8 @@ const AdoptionGallery = () => {
                                 </div>
                             </Card>
                         </Col>
-                    ))
-                    }
-                </Row >
+                    ))}
+                </Row>
             ) : (
                 <Empty
                     image={Empty.PRESENTED_IMAGE_SIMPLE}
@@ -169,7 +170,7 @@ const AdoptionGallery = () => {
                 open={previewVisible}
                 onCancel={() => setPreviewVisible(false)}
                 footer={null}
-                width={800}
+                width={isMobile ? '95%' : 850}
                 centered
                 destroyOnClose
                 bodyStyle={{ padding: 0, overflow: 'hidden', borderRadius: '24px' }}
@@ -184,7 +185,7 @@ const AdoptionGallery = () => {
                                             <div key={idx}>
                                                 <Image
                                                     alt={`${selectedPet.name}-${idx}`}
-                                                    src={`${import.meta.env.VITE_API_URL}${img.image_url}`}
+                                                    src={`${API_BASE_URL}${img.image_url}`}
                                                     style={{
                                                         height: '400px',
                                                         width: '100%',
@@ -199,7 +200,7 @@ const AdoptionGallery = () => {
                             ) : (
                                 <Image
                                     alt={selectedPet.name}
-                                    src={selectedPet.image_url ? `${import.meta.env.VITE_API_URL}${selectedPet.image_url}` : 'https://placehold.co/400x400?text=Waiting+for+Photo'}
+                                    src={selectedPet.image_url ? `${API_BASE_URL}${selectedPet.image_url}` : 'https://placehold.co/400x400?text=Waiting+for+Photo'}
                                     style={{
                                         height: '400px',
                                         width: '100%',

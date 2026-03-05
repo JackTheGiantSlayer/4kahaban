@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Typography, Row, Col, Card, Spin, Badge, Tag, Carousel, Button, Modal, Image, Space } from 'antd';
+import { Typography, Row, Col, Card, Spin, Badge, Tag, Carousel, Button, Modal, Image, Space, Grid } from 'antd';
 import { CalendarOutlined, HeartFilled, InfoCircleOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
-import api from '../services/api';
+import api, { API_BASE_URL } from '../services/api';
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -12,6 +12,8 @@ const Home = () => {
     const [loading, setLoading] = useState(true);
     const [selectedPet, setSelectedPet] = useState(null);
     const [previewVisible, setPreviewVisible] = useState(false);
+    const screens = Grid.useBreakpoint();
+    const isMobile = !screens.md;
 
     useEffect(() => {
         const fetchData = async () => {
@@ -35,9 +37,15 @@ const Home = () => {
 
     return (
         <div>
-            <section style={{ marginBottom: 40, background: 'linear-gradient(90deg, #1677ff 0%, #002140 100%)', padding: '40px', borderRadius: 16, color: '#fff' }}>
-                <Title level={1} style={{ color: '#fff', margin: 0 }}>Find Your New Best Friend</Title>
-                <Paragraph style={{ color: '#fff', fontSize: '1.2rem', marginTop: 10 }}>Give a loving home to a pet in need today.</Paragraph>
+            <section className="hero-section" style={{
+                marginBottom: 40,
+                background: 'linear-gradient(90deg, #1677ff 0%, #002140 100%)',
+                padding: isMobile ? '24px' : '40px',
+                borderRadius: 16,
+                color: '#fff'
+            }}>
+                <Title level={isMobile ? 2 : 1} style={{ color: '#fff', margin: 0 }}>Find Your New Best Friend</Title>
+                <Paragraph style={{ color: '#fff', fontSize: isMobile ? '1rem' : '1.2rem', marginTop: 10 }}>Give a loving home to a pet in need today.</Paragraph>
             </section>
 
             {news.length > 0 && (
@@ -47,27 +55,28 @@ const Home = () => {
                         {news.map(n => (
                             <div key={n.id}>
                                 <div style={{
-                                    height: 300,
-                                    background: n.image_url ? `url(${import.meta.env.VITE_API_URL}${n.image_url}) center/cover` : '#364d79',
+                                    height: isMobile ? 200 : 300,
+                                    background: n.image_url ? `url(${API_BASE_URL}${n.image_url}) center/cover` : '#364d79',
                                     color: '#fff',
                                     display: 'flex',
                                     alignItems: 'flex-end',
-                                    padding: 30,
+                                    padding: isMobile ? 15 : 30,
                                     position: 'relative'
                                 }}>
                                     <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(0deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%)' }}></div>
                                     <div style={{ position: 'relative', zIndex: 1 }}>
-                                        <Title level={3} style={{ color: '#fff', margin: 0 }}>{n.title}</Title>
-                                        <div style={{ display: 'flex', gap: '15px', marginTop: 5 }}>
-                                            <Text style={{ color: '#eee' }}>{n.date_posted ? new Date(n.date_posted).toLocaleDateString() : 'No date'}</Text>
+                                        <Title level={isMobile ? 4 : 3} style={{ color: '#fff', margin: 0 }}>{n.title}</Title>
+                                        <div style={{ display: 'flex', gap: isMobile ? '8px' : '15px', marginTop: 5, flexDirection: isMobile ? 'column' : 'row' }}>
+                                            <Text style={{ color: '#eee', fontSize: isMobile ? '12px' : '14px' }}>{n.date_posted ? new Date(n.date_posted).toLocaleDateString() : 'No date'}</Text>
                                             {n.event_period && (
                                                 <Tag color="orange" style={{
                                                     borderRadius: 15,
-                                                    padding: '5px 15px',
-                                                    fontSize: '1.1rem',
+                                                    padding: isMobile ? '2px 10px' : '5px 15px',
+                                                    fontSize: isMobile ? '0.8rem' : '1.1rem',
                                                     fontWeight: 'bold',
-                                                    border: '2px solid #fff',
-                                                    boxShadow: '0 2px 8px rgba(0,0,0,0.2)'
+                                                    border: isMobile ? '1px solid #fff' : '2px solid #fff',
+                                                    boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
+                                                    width: 'fit-content'
                                                 }}>
                                                     📅 {n.event_period}
                                                 </Tag>
@@ -98,7 +107,7 @@ const Home = () => {
                                         <div style={{ position: 'relative', height: 350, overflow: 'hidden' }}>
                                             <img
                                                 alt={pet.name}
-                                                src={pet.image_url ? `${import.meta.env.VITE_API_URL}${pet.image_url}` : 'https://placehold.co/400x300?text=No+Image'}
+                                                src={pet.image_url ? `${API_BASE_URL}${pet.image_url}` : 'https://placehold.co/400x300?text=No+Image'}
                                                 style={{ height: '100%', width: '100%', objectFit: 'cover', transition: 'transform 0.3s' }}
                                                 onMouseOver={e => e.currentTarget.style.transform = 'scale(1.05)'}
                                                 onMouseOut={e => e.currentTarget.style.transform = 'scale(1)'}
@@ -145,7 +154,7 @@ const Home = () => {
                 open={previewVisible}
                 footer={null}
                 onCancel={() => setPreviewVisible(false)}
-                width={800}
+                width={isMobile ? '95%' : 800}
                 centered
                 bodyStyle={{ padding: 0, borderRadius: '16px', overflow: 'hidden' }}
                 closeIcon={<div style={{ background: '#fff', borderRadius: '50%', padding: '5px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>✖</div>}
@@ -160,8 +169,8 @@ const Home = () => {
                                             <div key={idx}>
                                                 <Image
                                                     alt={`${selectedPet.name}-${idx}`}
-                                                    src={`${import.meta.env.VITE_API_URL}${img.image_url}`}
-                                                    style={{ height: '450px', width: '100%', objectFit: 'cover' }}
+                                                    src={`${API_BASE_URL}${img.image_url}`}
+                                                    style={{ height: isMobile ? '250px' : '450px', width: '100%', objectFit: 'cover' }}
                                                     preview={true}
                                                 />
                                             </div>
@@ -171,13 +180,13 @@ const Home = () => {
                             ) : (
                                 <Image
                                     alt={selectedPet.name}
-                                    src={selectedPet.image_url ? `${import.meta.env.VITE_API_URL}${selectedPet.image_url}` : 'https://placehold.co/400x400?text=No+Photo'}
-                                    style={{ height: '450px', width: '100%', objectFit: 'cover' }}
+                                    src={selectedPet.image_url ? `${API_BASE_URL}${selectedPet.image_url}` : 'https://placehold.co/400x400?text=No+Photo'}
+                                    style={{ height: isMobile ? '250px' : '450px', width: '100%', objectFit: 'cover' }}
                                     preview={true}
                                 />
                             )}
                         </Col>
-                        <Col xs={24} md={12} style={{ padding: '32px', display: 'flex', flexDirection: 'column' }}>
+                        <Col xs={24} md={12} style={{ padding: isMobile ? '20px' : '32px', display: 'flex', flexDirection: 'column' }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
                                 <Title level={2} style={{ margin: 0 }}>{selectedPet.name}</Title>
                                 <Tag color="blue" style={{ borderRadius: '20px' }}>Looking for Home ❤️</Tag>

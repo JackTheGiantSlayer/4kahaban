@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Typography, Row, Col, Card, Spin, Button, Modal, Form, Input, Upload, message, Popconfirm, Empty, Space, Select, Tabs, Image } from 'antd';
-import { UploadOutlined, DeleteOutlined, PlusOutlined, EyeOutlined } from '@ant-design/icons';
-import api from '../services/api';
+import { Typography, Row, Col, Card, Spin, Button, Modal, Form, Input, Upload, message, Popconfirm, Empty, Space, Select, Tabs, Image, Grid } from 'antd';
+import { UploadOutlined, DeleteOutlined, PlusOutlined, EyeOutlined, CameraOutlined } from '@ant-design/icons';
+import api, { API_BASE_URL } from '../services/api';
 
 const { Title, Text } = Typography;
 
@@ -18,6 +18,8 @@ const Gallery = () => {
     const [fileList, setFileList] = useState([]);
     const token = localStorage.getItem('token');
     const [isAdmin, setIsAdmin] = useState(false);
+    const screens = Grid.useBreakpoint();
+    const isMobile = !screens.md;
 
     useEffect(() => {
         fetchGallery();
@@ -110,23 +112,30 @@ const Gallery = () => {
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
             <div style={{
                 background: '#fff',
-                padding: '24px 32px',
+                padding: isMobile ? '16px' : '24px 32px',
                 borderRadius: '20px',
-                marginBottom: 40,
+                marginBottom: isMobile ? 24 : 40,
                 boxShadow: '0 4px 20px rgba(0,0,0,0.05)',
                 border: '1px solid #f0f0f0'
             }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
+                <div style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: isMobile ? 'flex-start' : 'center',
+                    flexDirection: isMobile ? 'column' : 'row',
+                    gap: isMobile ? '16px' : '0',
+                    marginBottom: 24
+                }}>
                     <div>
-                        <Title level={2} style={{ margin: 0, color: '#1a1a1a' }}>Memory Gallery 📸</Title>
-                        <Text type="secondary" style={{ fontSize: '1rem' }}>Capturing beautiful moments of our furry friends.</Text>
+                        <Title level={isMobile ? 3 : 2} style={{ margin: 0, color: '#1a1a1a' }}>Memory Gallery 📸</Title>
+                        <Text type="secondary" style={{ fontSize: isMobile ? '0.9rem' : '1rem' }}>Capturing beautiful moments of our furry friends.</Text>
                     </div>
                     {isAdmin && (
-                        <Space size="middle">
+                        <Space size={isMobile ? "small" : "middle"} direction={isMobile ? "vertical" : "horizontal"} style={{ width: isMobile ? '100%' : 'auto' }}>
                             <Button
                                 icon={<PlusOutlined />}
                                 onClick={() => setIsAlbumModalOpen(true)}
-                                style={{ borderRadius: '8px' }}
+                                style={{ borderRadius: '8px', width: isMobile ? '100%' : 'auto' }}
                             >
                                 New Album
                             </Button>
@@ -134,7 +143,7 @@ const Gallery = () => {
                                 type="primary"
                                 icon={<UploadOutlined />}
                                 onClick={() => setIsPhotoModalOpen(true)}
-                                style={{ borderRadius: '8px', boxShadow: '0 2px 4px rgba(24, 144, 255, 0.2)' }}
+                                style={{ borderRadius: '8px', width: isMobile ? '100%' : 'auto', boxShadow: '0 2px 4px rgba(24, 144, 255, 0.2)' }}
                             >
                                 Upload Photos
                             </Button>
@@ -167,11 +176,11 @@ const Gallery = () => {
                                     hoverable
                                     style={{ borderRadius: 16, overflow: 'hidden', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}
                                     cover={
-                                        <div style={{ height: 280, overflow: 'hidden', position: 'relative' }}>
+                                        <div style={{ height: isMobile ? 200 : 280, overflow: 'hidden', position: 'relative' }}>
                                             <Image
                                                 alt={item.caption}
-                                                src={`${import.meta.env.VITE_API_URL}${item.image_url}`}
-                                                style={{ width: '100%', height: 280, objectFit: 'cover' }}
+                                                src={`${API_BASE_URL}${item.image_url}`}
+                                                style={{ width: '100%', height: isMobile ? 200 : 280, objectFit: 'cover' }}
                                                 wrapperStyle={{ width: '100%' }}
                                             />
                                             {isAdmin && (
@@ -215,6 +224,7 @@ const Gallery = () => {
                 title="Upload Photos"
                 open={isPhotoModalOpen}
                 onCancel={() => setIsPhotoModalOpen(false)}
+                width={isMobile ? '95%' : 520}
                 footer={null}
                 destroyOnClose
             >
@@ -264,6 +274,7 @@ const Gallery = () => {
                 title="Create New Album"
                 open={isAlbumModalOpen}
                 onCancel={() => setIsAlbumModalOpen(false)}
+                width={isMobile ? '95%' : 520}
                 footer={null}
                 destroyOnClose
             >

@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ConfigProvider } from 'antd';
+import './styles/responsive.css';
 import MainLayout from './components/MainLayout';
 
 import Home from './pages/Home';

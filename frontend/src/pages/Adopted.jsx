@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Typography, Row, Col, Card, Spin, Tag, Button, Modal, Image, Space, Carousel, Empty, message } from 'antd';
+import { Typography, Row, Col, Card, Spin, Tag, Button, Modal, Image, Space, Carousel, Empty, message, Grid } from 'antd';
 import { CheckCircleFilled, HeartFilled, PlusCircleOutlined, InfoCircleOutlined, CalendarOutlined } from '@ant-design/icons';
-import api from '../services/api';
+import api, { API_BASE_URL } from '../services/api';
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -10,6 +10,8 @@ const Adopted = () => {
     const [loading, setLoading] = useState(true);
     const [selectedPet, setSelectedPet] = useState(null);
     const [previewVisible, setPreviewVisible] = useState(false);
+    const screens = Grid.useBreakpoint();
+    const isMobile = !screens.md;
 
     useEffect(() => {
         const fetchData = async () => {
@@ -29,9 +31,9 @@ const Adopted = () => {
 
     return (
         <div style={{ width: '100%', padding: '0 40px', margin: '0 auto' }}>
-            <div style={{ textAlign: 'center', marginBottom: 40 }}>
-                <Title level={1}>Adopted Forever <CheckCircleFilled style={{ color: '#52c41a' }} /></Title>
-                <Text type="secondary" style={{ fontSize: '1.2rem' }}>Check out our alumni who found their forever homes!</Text>
+            <div style={{ textAlign: 'center', marginBottom: isMobile ? 24 : 40 }}>
+                <Title level={isMobile ? 2 : 1}>Adopted Forever <CheckCircleFilled style={{ color: '#52c41a' }} /></Title>
+                <Text type="secondary" style={{ fontSize: isMobile ? '1rem' : '1.2rem' }}>Check out our alumni who found their forever homes!</Text>
             </div>
 
             <Row gutter={[24, 24]}>
@@ -50,8 +52,8 @@ const Adopted = () => {
                                 >
                                     <img
                                         alt={pet.name}
-                                        src={pet.image_url ? `${import.meta.env.VITE_API_URL}${pet.image_url}` : 'https://placehold.co/400x300?text=No+Image'}
-                                        style={{ height: '100%', objectFit: 'cover', width: '100%', filter: 'brightness(0.95)', transition: 'transform 0.3s' }}
+                                        src={pet.image_url ? `${API_BASE_URL}${pet.image_url}` : 'https://placehold.co/400x300?text=No+Image'}
+                                        style={{ height: isMobile ? '250px' : '350px', objectFit: 'cover', width: '100%', filter: 'brightness(0.95)', transition: 'transform 0.3s' }}
                                         onMouseOver={e => e.currentTarget.style.transform = 'scale(1.05)'}
                                         onMouseOut={e => e.currentTarget.style.transform = 'scale(1)'}
                                     />
@@ -108,7 +110,7 @@ const Adopted = () => {
                 open={previewVisible}
                 onCancel={() => setPreviewVisible(false)}
                 footer={null}
-                width={850}
+                width={isMobile ? '95%' : 850}
                 centered
                 destroyOnClose
                 bodyStyle={{ padding: 0, overflow: 'hidden', borderRadius: '24px' }}
@@ -123,7 +125,7 @@ const Adopted = () => {
                                             <div key={idx}>
                                                 <Image
                                                     alt={`${selectedPet.name}-${idx}`}
-                                                    src={`${import.meta.env.VITE_API_URL}${img.image_url}`}
+                                                    src={`${API_BASE_URL}${img.image_url}`}
                                                     style={{ height: '450px', width: '100%', objectFit: 'cover' }}
                                                     preview={true}
                                                 />
@@ -134,7 +136,7 @@ const Adopted = () => {
                             ) : (
                                 <Image
                                     alt={selectedPet.name}
-                                    src={selectedPet.image_url ? `${import.meta.env.VITE_API_URL}${selectedPet.image_url}` : 'https://placehold.co/400x400?text=No+Photo'}
+                                    src={selectedPet.image_url ? `${API_BASE_URL}${selectedPet.image_url}` : 'https://placehold.co/400x400?text=No+Photo'}
                                     style={{ height: '450px', width: '100%', objectFit: 'cover' }}
                                     preview={true}
                                 />

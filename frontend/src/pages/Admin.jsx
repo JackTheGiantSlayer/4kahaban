@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Typography, Tabs, Table, Button, Modal, Form, Input, DatePicker, Select, Upload, message, Space, Popconfirm, Row, Col, Image, Tag, Card } from 'antd';
+import { Typography, Tabs, Table, Button, Modal, Form, Input, DatePicker, Select, Upload, message, Space, Popconfirm, Row, Col, Image, Tag, Card, Grid } from 'antd';
 import { UploadOutlined, PlusOutlined, EditOutlined, DeleteOutlined, MedicineBoxOutlined, UserAddOutlined, StarOutlined, HeartFilled } from '@ant-design/icons';
 import { PieChart, Pie, Cell, Tooltip as RechartsTooltip, Legend, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid } from 'recharts';
-import api from '../services/api';
+import api, { API_BASE_URL } from '../services/api';
 import dayjs from 'dayjs';
 
 const { Title, Text } = Typography;
@@ -15,8 +15,8 @@ const Admin = () => {
     const [news, setNews] = useState([]);
     const [upcomingVaccines, setUpcomingVaccines] = useState([]);
     const [transactions, setTransactions] = useState([]);
-
-    // Shared Modal State
+    const screens = Grid.useBreakpoint();
+    const isMobile = !screens.md;
     const [modalConfig, setModalConfig] = useState({ visible: false, type: null, record: null });
     const [form] = Form.useForm();
     const [fileList, setFileList] = useState([]);
@@ -358,7 +358,7 @@ const Admin = () => {
         { title: 'Amount', dataIndex: 'amount', key: 'amount', render: a => `฿${a.toLocaleString()}` },
         { title: 'Description', dataIndex: 'description', key: 'description' },
         { title: 'Date', dataIndex: 'date_recorded', key: 'date', render: d => dayjs(d).format('DD MMM YYYY') },
-        { title: 'Receipt', dataIndex: 'receipt_image_url', key: 'receipt', render: r => r ? <Image src={`${import.meta.env.VITE_API_URL}${r}`} width={50} /> : 'No Receipt' },
+        { title: 'Receipt', dataIndex: 'receipt_image_url', key: 'receipt', render: r => r ? <Image src={`${API_BASE_URL}${r}`} width={50} /> : 'No Receipt' },
         {
             title: 'Actions',
             key: 'actions',
@@ -606,7 +606,7 @@ const Admin = () => {
                     <div style={{ marginBottom: 16, textAlign: 'right' }}>
                         <Button type="primary" icon={<PlusOutlined />} onClick={() => handleModalOpen('animal')}>Register Animal</Button>
                     </div>
-                    <Table dataSource={animals} columns={animalColumns} rowKey="id" />
+                    <Table dataSource={animals} columns={animalColumns} rowKey="id" scroll={{ x: 'max-content' }} />
                 </>
             ),
         },
@@ -618,7 +618,7 @@ const Admin = () => {
                     <div style={{ marginBottom: 16, textAlign: 'right' }}>
                         <Button type="primary" icon={<UserAddOutlined />} onClick={() => handleModalOpen('user')}>Add New User</Button>
                     </div>
-                    <Table dataSource={users} columns={userColumns} rowKey="id" />
+                    <Table dataSource={users} columns={userColumns} rowKey="id" scroll={{ x: 'max-content' }} />
                 </>
             ),
         },
@@ -630,7 +630,7 @@ const Admin = () => {
                     <div style={{ marginBottom: 16, textAlign: 'right' }}>
                         <Button type="primary" icon={<MedicineBoxOutlined />} onClick={() => handleModalOpen('hospital')}>Add Hospital</Button>
                     </div>
-                    <Table dataSource={hospitals} columns={hospitalColumns} rowKey="id" />
+                    <Table dataSource={hospitals} columns={hospitalColumns} rowKey="id" scroll={{ x: 'max-content' }} />
                 </>
             ),
         },
@@ -642,7 +642,7 @@ const Admin = () => {
                     <div style={{ marginBottom: 16, textAlign: 'right' }}>
                         <Button type="primary" icon={<PlusOutlined />} onClick={() => handleModalOpen('news')}>Post News</Button>
                     </div>
-                    <Table dataSource={news} columns={newsColumns} rowKey="id" />
+                    <Table dataSource={news} columns={newsColumns} rowKey="id" scroll={{ x: 'max-content' }} />
                 </>
             ),
         },
@@ -652,7 +652,7 @@ const Admin = () => {
             children: (
                 <>
                     <Title level={4}>Upcoming Vaccinations & Schedules</Title>
-                    <Table dataSource={upcomingVaccines} columns={vaccineColumns} rowKey="id" pagination={{ pageSize: 5 }} />
+                    <Table dataSource={upcomingVaccines} columns={vaccineColumns} rowKey="id" pagination={{ pageSize: 5 }} scroll={{ x: 'max-content' }} />
 
                     <Title level={4} style={{ marginTop: '40px' }} type="danger">Overdue Vaccinations</Title>
                     <Table
@@ -660,10 +660,11 @@ const Admin = () => {
                         columns={allAnimalVaccineColumns}
                         rowKey="id"
                         pagination={{ pageSize: 5, showSizeChanger: true, pageSizeOptions: ['5', '10', '25', '50'] }}
+                        scroll={{ x: 'max-content' }}
                     />
 
                     <Title level={4} style={{ marginTop: '40px' }}>All Animals Vaccination Status</Title>
-                    <Table dataSource={animals} columns={allAnimalVaccineColumns} rowKey="id" pagination={{ pageSize: 10, showSizeChanger: true, pageSizeOptions: ['10', '25', '50', '100'] }} />
+                    <Table dataSource={animals} columns={allAnimalVaccineColumns} rowKey="id" pagination={{ pageSize: 10, showSizeChanger: true, pageSizeOptions: ['10', '25', '50', '100'] }} scroll={{ x: 'max-content' }} />
                 </>
             ),
         },
@@ -675,27 +676,27 @@ const Admin = () => {
                     <div style={{ marginBottom: 16, textAlign: 'right' }}>
                         <Button type="primary" icon={<PlusOutlined />} onClick={() => handleModalOpen('transaction')}>Add Income/Expense</Button>
                     </div>
-                    <Row gutter={16} style={{ marginBottom: 20 }}>
-                        <Col span={8}>
-                            <Card bordered={false} style={{ background: '#f6ffed' }}>
+                    <Row gutter={[16, 16]} style={{ marginBottom: 20 }}>
+                        <Col xs={24} md={8}>
+                            <Card bordered={false} style={{ background: '#f6ffed', height: '100%' }}>
                                 <Title level={4} style={{ color: '#52c41a' }}>Total Income</Title>
                                 <Title level={2}>฿{transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0).toLocaleString()}</Title>
                             </Card>
                         </Col>
-                        <Col span={8}>
-                            <Card bordered={false} style={{ background: '#fff1f0' }}>
+                        <Col xs={24} md={8}>
+                            <Card bordered={false} style={{ background: '#fff1f0', height: '100%' }}>
                                 <Title level={4} style={{ color: '#f5222d' }}>Total Expense</Title>
                                 <Title level={2}>฿{transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0).toLocaleString()}</Title>
                             </Card>
                         </Col>
-                        <Col span={8}>
-                            <Card bordered={false} style={{ background: '#e6f7ff' }}>
+                        <Col xs={24} md={8}>
+                            <Card bordered={false} style={{ background: '#e6f7ff', height: '100%' }}>
                                 <Title level={4} style={{ color: '#1890ff' }}>Net Balance</Title>
                                 <Title level={2}>฿{(transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0) - transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0)).toLocaleString()}</Title>
                             </Card>
                         </Col>
                     </Row>
-                    <Table dataSource={transactions} columns={transactionColumns} rowKey="id" />
+                    <Table dataSource={transactions} columns={transactionColumns} rowKey="id" scroll={{ x: 'max-content' }} />
                 </>
             ),
         },
@@ -728,7 +729,7 @@ const Admin = () => {
                 open={modalConfig.visible}
                 onCancel={handleModalClose}
                 onOk={() => form.submit()}
-                width={600}
+                width={isMobile ? '95%' : 600}
             >
                 <Form form={form} layout="vertical" onFinish={onSubmit}>
                     {modalConfig.type === 'animal' && (
@@ -797,7 +798,7 @@ const Admin = () => {
                                         {modalConfig.record.images.map((img) => (
                                             <div key={img.id} style={{ position: 'relative', border: '1px solid #d9d9d9', borderRadius: '4px', padding: '4px' }}>
                                                 <Image
-                                                    src={`${import.meta.env.VITE_API_URL}${img.image_url}`}
+                                                    src={`${API_BASE_URL}${img.image_url}`}
                                                     width={80}
                                                     height={80}
                                                     style={{ objectFit: 'cover', borderRadius: '2px' }}

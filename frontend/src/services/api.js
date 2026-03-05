@@ -9,6 +9,8 @@ const api = axios.create({
     baseURL: baseURL,
 });
 
+export const API_BASE_URL = baseURL;
+
 // Request interceptor to add auth token and ensure /api/v1 prefix
 api.interceptors.request.use(
     (config) => {

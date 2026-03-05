@@ -1,5 +1,5 @@
 import React from 'react';
-import { Typography, Divider, Tabs, List } from 'antd';
+import { Typography, Divider, Tabs, List, Grid } from 'antd';
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -147,9 +147,20 @@ const Terms = () => {
         },
     ];
 
+    const screens = Grid.useBreakpoint();
+    const isMobile = !screens.md;
+
     return (
-        <div style={{ padding: '24px', maxWidth: '900px', margin: '0 auto', background: '#fff', borderRadius: '8px', marginTop: '24px', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
-            <Title level={3} style={{ textAlign: 'center', color: '#1677ff', marginBottom: '24px' }}>Terms & Conditions / Adoption Questionnaire</Title>
+        <div style={{
+            padding: isMobile ? '16px' : '24px',
+            maxWidth: '900px',
+            margin: '0 auto',
+            background: '#fff',
+            borderRadius: '8px',
+            marginTop: isMobile ? '0' : '24px',
+            boxShadow: isMobile ? 'none' : '0 4px 12px rgba(0,0,0,0.05)'
+        }}>
+            <Title level={isMobile ? 4 : 3} style={{ textAlign: 'center', color: '#1677ff', marginBottom: '24px' }}>Terms & Conditions / Adoption Questionnaire</Title>
             <Tabs defaultActiveKey="1" items={items} />
         </div>
     );

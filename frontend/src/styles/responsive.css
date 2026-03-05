@@ -1,0 +1,75 @@
+/* Responsive Design Tokens and Utilities */
+
+/* Header Adjustments */
+@media (max-width: 768px) {
+  .ant-layout-header {
+    padding: 0 20px !important;
+    height: 70px !important;
+    line-height: 70px !important;
+  }
+  
+  .ant-layout-header img {
+    height: 60px !important;
+  }
+}
+
+/* Page Content Padding */
+@media (max-width: 576px) {
+  .ant-layout-content {
+    padding: 16px 12px !important;
+  }
+  
+  .responsive-card-padding {
+    padding: 16px !important;
+  }
+}
+
+/* Typography Scale */
+@media (max-width: 576px) {
+  h1.ant-typography {
+    font-size: 24px !important;
+  }
+  h2.ant-typography {
+    font-size: 20px !important;
+  }
+  h3.ant-typography {
+    font-size: 18px !important;
+  }
+}
+
+/* Hero Section */
+.hero-section {
+  transition: all 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  .hero-section {
+    padding: 24px !important;
+    margin-bottom: 24px !important;
+  }
+}
+
+/* Table Responsiveness Utilities */
+.responsive-table .ant-table {
+  overflow-x: auto;
+}
+
+/* Modal Responsiveness */
+@media (max-width: 576px) {
+  .ant-modal {
+    width: 95% !important;
+    top: 20px;
+    padding-bottom: 20px;
+  }
+  
+  .ant-modal-body {
+    padding: 16px !important;
+  }
+}
+
+/* Grid Adjustments for Mobile */
+@media (max-width: 480px) {
+  .ant-col-xs-24 {
+    width: 100% !important;
+  }
+}
