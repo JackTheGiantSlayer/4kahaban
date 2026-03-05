@@ -64,7 +64,7 @@ const Terms = () => {
                 <li>พร้อมรับมือความซน พร้อมสอนและไม่ส่งต่อให้ญาติหรือคนอืน</li>
                 <li>มีแพลนไปเรียนต่อหรือไปอยู่ต่างประเทศในอนาคตหรือไม่</li>
                 <li>กทม ปริมณฑลใกล้เคียง ที่พร้อมตามเงื่อนไขค่ะ</li>
-                <li><b>มีการทำสัญญาการรับอุปการะ</b></li>
+                <li><b>มีการทำสัญญาการรับอุปการะ</b> (<a href="/Contract documents-2569.pdf" download>ดาวน์โหลดตัวอย่างสัญญาที่นี่</a>)</li>
             </ul>
         </div>
     );
@@ -129,7 +129,7 @@ const Terms = () => {
                 <li>Are you ready to handle mischievous behavior, ready to teach them, and promise <b>not</b> to pass them on to relatives or anyone else?</li>
                 <li>Do you have any plans to study or move abroad in the future?</li>
                 <li>Must reside in Bangkok/vicinity and be ready to comply with the living conditions.</li>
-                <li><b>An adoption contract must be signed.</b></li>
+                <li><b>An adoption contract must be signed.</b> (<a href="/Contract documents-2569.pdf" download>Download sample contract here</a>)</li>
             </ul>
         </div>
     );
