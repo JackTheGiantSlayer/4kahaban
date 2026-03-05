@@ -8,7 +8,7 @@ const Terms = () => {
         <div>
             <Title level={4}>แบบสอบถามสำหรับผู้สนใจรับอุปการะ</Title>
             <Paragraph>
-                ทางสี่ขาหาบ้านอยากขอความร่วมมือให้ท่านที่สนใจรับอุปการะสุนัขอ่านแบบสอบถามให้ละเอียดถี่ถ้วน พร้อมตอบแบบสอบถามทุกข้อโดยละเอียดเพื่อประโยชน์ของท่าน ทั้งนี้ขอให้ท่านช่วยตอบแบบสอบถามดังต่อไปนี้เข้าสู่ <b><a href="https://www.facebook.com/4kahaban?locale=th_TH" target="_blank" rel="noopener noreferrer">กล่องข้อความ (Inbox) ของเพจ</a></b> (https://www.facebook.com/4kahaban?locale=th_TH):
+                ทางสี่ขาหาบ้านอยากขอความร่วมมือให้ท่านที่สนใจรับอุปการะสุนัขอ่านแบบสอบถามให้ละเอียดถี่ถ้วน พร้อมตอบแบบสอบถามทุกข้อโดยละเอียดเพื่อประโยชน์ของท่าน ทั้งนี้ขอให้ท่านช่วยตอบแบบสอบถามดังต่อไปนี้เข้าสู่ <b><a href="https://www.facebook.com/4kahaban?locale=th_TH" target="_blank" rel="noopener noreferrer">กล่องข้อความ (Inbox) ของเพจ</a></b> (<a href="https://www.facebook.com/4kahaban?locale=th_TH" target="_blank" rel="noopener noreferrer">https://www.facebook.com/4kahaban?locale=th_TH</a>):
             </Paragraph>
 
             <List
@@ -34,7 +34,7 @@ const Terms = () => {
             />
 
             <Paragraph>
-                สนใจรับเพื่อนที่ซื่อสัตย์ไปเลี้ยง ท่านสามารถติดต่อโดยแจ้งชื่อและเบอร์ติดต่อใน <b><a href="https://www.facebook.com/4kahaban?locale=th_TH" target="_blank" rel="noopener noreferrer">กล่องข้อความ (inbox)</a></b> (https://www.facebook.com/4kahaban?locale=th_TH) ได้คะ ถ้าท่านไม่สะดวกในการรับเลี้ยงแต่อยากช่วยเหลือ ขอเชิญแชร์, แทคภาพ, หรือเชิญชวนเพื่อนๆที่ท่านรู้จักมากด "ไลก์" ที่เพจสี่ขาหาบ้านได้เลยนะคะ
+                สนใจรับเพื่อนที่ซื่อสัตย์ไปเลี้ยง ท่านสามารถติดต่อโดยแจ้งชื่อและเบอร์ติดต่อใน <b><a href="https://www.facebook.com/4kahaban?locale=th_TH" target="_blank" rel="noopener noreferrer">กล่องข้อความ (inbox)</a></b> (<a href="https://www.facebook.com/4kahaban?locale=th_TH" target="_blank" rel="noopener noreferrer">https://www.facebook.com/4kahaban?locale=th_TH</a>) ได้คะ ถ้าท่านไม่สะดวกในการรับเลี้ยงแต่อยากช่วยเหลือ ขอเชิญแชร์, แทคภาพ, หรือเชิญชวนเพื่อนๆที่ท่านรู้จักมากด "ไลก์" ที่เพจสี่ขาหาบ้านได้เลยนะคะ
             </Paragraph>
 
             <Paragraph>
@@ -73,7 +73,7 @@ const Terms = () => {
         <div>
             <Title level={4}>Adoption Questionnaire & Conditions</Title>
             <Paragraph>
-                The "4kahaban" (Four-Legged Seeking Home) page kindly requests your cooperation. If you are interested in adopting a dog, please read and answer the following questionnaire carefully and thoroughly for your own benefit. Once completed, please send your answers to our <b><a href="https://www.facebook.com/4kahaban?locale=th_TH" target="_blank" rel="noopener noreferrer">Facebook Inbox</a></b> (https://www.facebook.com/4kahaban?locale=th_TH):
+                The "4kahaban" (Four-Legged Seeking Home) page kindly requests your cooperation. If you are interested in adopting a dog, please read and answer the following questionnaire carefully and thoroughly for your benefit. Once completed, please send your answers to our <b><a href="https://www.facebook.com/4kahaban?locale=th_TH" target="_blank" rel="noopener noreferrer">Facebook Inbox</a></b> (<a href="https://www.facebook.com/4kahaban?locale=th_TH" target="_blank" rel="noopener noreferrer">https://www.facebook.com/4kahaban?locale=th_TH</a>):
             </Paragraph>
 
             <List
@@ -99,7 +99,7 @@ const Terms = () => {
             />
 
             <Paragraph>
-                If you are interested in giving a loyal friend a forever home, please contact us by sending your name and phone number to our <b><a href="https://www.facebook.com/4kahaban?locale=th_TH" target="_blank" rel="noopener noreferrer">Facebook Inbox</a></b> (https://www.facebook.com/4kahaban?locale=th_TH). If you are not ready to adopt but still wish to help, please feel free to share our posts, tag friends, or invite people to "Like" the 4kahaban page!
+                If you are interested in giving a loyal friend a forever home, please contact us by sending your name and phone number to our <b><a href="https://www.facebook.com/4kahaban?locale=th_TH" target="_blank" rel="noopener noreferrer">Facebook Inbox</a></b> (<a href="https://www.facebook.com/4kahaban?locale=th_TH" target="_blank" rel="noopener noreferrer">https://www.facebook.com/4kahaban?locale=th_TH</a>). If you are not ready to adopt but still wish to help, please feel free to share our posts, tag friends, or invite people to "Like" the 4kahaban page!
             </Paragraph>
 
             <Paragraph>
