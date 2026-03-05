@@ -1,7 +1,9 @@
 import axios from 'axios';
 
 // Ensure baseURL doesn't conflict with leading slashes in component calls
-const baseURL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+// Dynamically determine baseURL if not provided via env
+const dynamicBaseURL = `http://${window.location.hostname}:8000`;
+const baseURL = import.meta.env.VITE_API_URL || dynamicBaseURL;
 
 const api = axios.create({
     baseURL: baseURL,

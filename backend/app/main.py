@@ -15,14 +15,9 @@ os.makedirs("uploads", exist_ok=True)
 app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 
 # Configure CORS
-origins = [
-    "http://localhost:5173",
-    "http://localhost",
-]
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["*"],  # Allow all for local network access
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
