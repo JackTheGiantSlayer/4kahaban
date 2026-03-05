@@ -123,3 +123,13 @@ class GalleryPhoto(Base):
     
     album_id = Column(Integer, ForeignKey("albums.id"), nullable=True)
     album = relationship("Album", back_populates="photos")
+
+class Transaction(Base):
+    __tablename__ = "transactions"
+    id = Column(Integer, primary_key=True, index=True)
+    type = Column(String, nullable=False) # "income" or "expense"
+    amount = Column(Float, nullable=False)
+    description = Column(String, nullable=False)
+    receipt_image_url = Column(String, nullable=True)
+    date_recorded = Column(Date, nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow)

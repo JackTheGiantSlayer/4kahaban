@@ -14,6 +14,7 @@ const Admin = () => {
     const [hospitals, setHospitals] = useState([]);
     const [news, setNews] = useState([]);
     const [upcomingVaccines, setUpcomingVaccines] = useState([]);
+    const [transactions, setTransactions] = useState([]);
 
     // Shared Modal State
     const [modalConfig, setModalConfig] = useState({ visible: false, type: null, record: null });
@@ -56,6 +57,14 @@ const Admin = () => {
             setUpcomingVaccines(res.data);
         } catch (err) {
             console.error("Vaccinations fetch failed", err);
+        }
+
+        // Fetch Transactions
+        try {
+            const res = await api.get('/transactions');
+            setTransactions(res.data);
+        } catch (err) {
+            console.error("Transactions fetch failed", err);
         }
     };
 
@@ -147,6 +156,19 @@ const Admin = () => {
                 if (record) await api.put(`/public/news/${record.id}`, formData);
                 else await api.post('/public/news', formData);
                 message.success('News saved');
+            } else if (type === 'transaction') {
+                const formData = new FormData();
+                formData.append('type', values.type);
+                formData.append('amount', values.amount);
+                formData.append('description', values.description);
+                formData.append('date_recorded', values.date_recorded.format('YYYY-MM-DD'));
+                if (fileList.length > 0) {
+                    const file = fileList[0].originFileObj || fileList[0];
+                    if (file) formData.append('receipt_image', file);
+                }
+
+                await api.post('/transactions', formData);
+                message.success('Transaction saved');
             } else if (type === 'doctor') {
                 const payload = {
                     name: values.name,
@@ -203,6 +225,7 @@ const Admin = () => {
             if (type === 'hospital') await api.delete(`/public/hospitals/${id}`);
             if (type === 'doctor') await api.delete(`/public/doctors/${id}`);
             if (type === 'news') await api.delete(`/public/news/${id}`);
+            if (type === 'transaction') await api.delete(`/transactions/${id}`);
             message.success('Deleted successfully');
             fetchData();
             fetchHospitals();
@@ -310,6 +333,25 @@ const Admin = () => {
             key: 'actions',
             render: (_, record) => (
                 <Button type="primary" size="small" icon={<EditOutlined />} onClick={() => handleModalOpen('animal', record)}>Edit</Button>
+            )
+        }
+    ];
+
+    const transactionColumns = [
+        { title: 'Type', dataIndex: 'type', key: 'type', render: t => <Tag color={t === 'income' ? 'green' : 'red'}>{t.toUpperCase()}</Tag> },
+        { title: 'Amount', dataIndex: 'amount', key: 'amount', render: a => `฿${a.toLocaleString()}` },
+        { title: 'Description', dataIndex: 'description', key: 'description' },
+        { title: 'Date', dataIndex: 'date_recorded', key: 'date', render: d => dayjs(d).format('DD MMM YYYY') },
+        { title: 'Receipt', dataIndex: 'receipt_image_url', key: 'receipt', render: r => r ? <Image src={`${import.meta.env.VITE_API_URL}${r}`} width={50} /> : 'No Receipt' },
+        {
+            title: 'Actions',
+            key: 'actions',
+            render: (_, record) => (
+                <Space>
+                    <Popconfirm title="Delete transaction?" onConfirm={() => deleteItem('transaction', record.id)}>
+                        <Button type="link" danger icon={<DeleteOutlined />}>Delete</Button>
+                    </Popconfirm>
+                </Space>
             )
         }
     ];
@@ -519,6 +561,38 @@ const Admin = () => {
             ),
         },
         {
+            key: 'transaction',
+            label: 'Financial Accounting',
+            children: (
+                <>
+                    <div style={{ marginBottom: 16, textAlign: 'right' }}>
+                        <Button type="primary" icon={<PlusOutlined />} onClick={() => handleModalOpen('transaction')}>Add Income/Expense</Button>
+                    </div>
+                    <Row gutter={16} style={{ marginBottom: 20 }}>
+                        <Col span={8}>
+                            <Card bordered={false} style={{ background: '#f6ffed' }}>
+                                <Title level={4} style={{ color: '#52c41a' }}>Total Income</Title>
+                                <Title level={2}>฿{transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0).toLocaleString()}</Title>
+                            </Card>
+                        </Col>
+                        <Col span={8}>
+                            <Card bordered={false} style={{ background: '#fff1f0' }}>
+                                <Title level={4} style={{ color: '#f5222d' }}>Total Expense</Title>
+                                <Title level={2}>฿{transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0).toLocaleString()}</Title>
+                            </Card>
+                        </Col>
+                        <Col span={8}>
+                            <Card bordered={false} style={{ background: '#e6f7ff' }}>
+                                <Title level={4} style={{ color: '#1890ff' }}>Net Balance</Title>
+                                <Title level={2}>฿{(transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0) - transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0)).toLocaleString()}</Title>
+                            </Card>
+                        </Col>
+                    </Row>
+                    <Table dataSource={transactions} columns={transactionColumns} rowKey="id" />
+                </>
+            ),
+        },
+        {
             key: '6',
             label: 'System Settings',
             children: (
@@ -638,6 +712,31 @@ const Admin = () => {
                                     </div>
                                 </Form.Item>
                             )}
+                        </>
+                    )}
+
+                    {modalConfig.type === 'transaction' && (
+                        <>
+                            <Form.Item name="type" label="Transaction Type" rules={[{ required: true }]}>
+                                <Select>
+                                    <Option value="income">Income (รายรับ)</Option>
+                                    <Option value="expense">Expense (รายจ่าย)</Option>
+                                </Select>
+                            </Form.Item>
+                            <Form.Item name="amount" label="Amount (THB)" rules={[{ required: true }]}><Input type="number" step="0.01" min="0" /></Form.Item>
+                            <Form.Item name="description" label="Description / Note" rules={[{ required: true }]}><Input /></Form.Item>
+                            <Form.Item name="date_recorded" label="Date" rules={[{ required: true }]}><DatePicker style={{ width: '100%' }} /></Form.Item>
+                            <Form.Item label="Receipt / Slip Image">
+                                <Upload
+                                    beforeUpload={file => { setFileList([file]); return false; }}
+                                    fileList={fileList}
+                                    onRemove={() => setFileList([])}
+                                    maxCount={1}
+                                    listType="picture"
+                                >
+                                    <Button icon={<UploadOutlined />}>Upload Slip</Button>
+                                </Upload>
+                            </Form.Item>
                         </>
                     )}
 

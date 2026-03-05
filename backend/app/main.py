@@ -4,7 +4,7 @@ from fastapi.staticfiles import StaticFiles
 
 from app.core.database import engine
 from app.models.all_models import Base
-from app.api import auth, users, animals, vaccines, public
+from app.api import auth, users, animals, vaccines, public, transactions
 from app.services.scheduler_service import start_scheduler
 import os
 
@@ -40,7 +40,7 @@ app.include_router(users.router, prefix="/api/v1/users", tags=["users"])
 app.include_router(animals.router, prefix="/api/v1/animals", tags=["animals"])
 app.include_router(vaccines.router, prefix="/api/v1/vaccines", tags=["vaccines"])
 app.include_router(public.router, prefix="/api/v1/public", tags=["public"])
-
+app.include_router(transactions.router, prefix="/api/v1/transactions", tags=["transactions"])
 @app.get("/")
 def read_root():
     return {"message": "Welcome to 4kahaban API"}

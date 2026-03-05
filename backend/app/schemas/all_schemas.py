@@ -198,3 +198,22 @@ class AlbumResponse(AlbumBase):
     class Config:
         orm_mode = True
         from_attributes = True
+
+# Transaction Schemas
+class TransactionBase(BaseModel):
+    type: str # 'income' or 'expense'
+    amount: float
+    description: str
+    date_recorded: date
+    receipt_image_url: Optional[str] = None
+
+class TransactionCreate(TransactionBase):
+    pass
+
+class TransactionResponse(TransactionBase):
+    id: int
+    created_at: datetime
+
+    class Config:
+        orm_mode = True
+        from_attributes = True
