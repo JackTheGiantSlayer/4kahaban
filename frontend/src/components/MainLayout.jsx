@@ -106,9 +106,6 @@ const MainLayout = ({ children }) => {
                 </div>
             </Content>
             <Footer style={{ textAlign: 'center' }}>
-                <div style={{ marginBottom: '8px' }}>
-                    <Link to="/terms" style={{ color: '#1890ff' }}>Terms and Conditions</Link>
-                </div>
                 Pet Management System ©{new Date().getFullYear()}
             </Footer>
         </Layout>
